@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <title>Tutorials.js 使用教程</title>
-  
+  <title>使用教程</title>
+
   <link rel="stylesheet" href="dist/app.css"/>
-  
+
   <!--[if lt IE 8]>
     <style>
       .notsupport{
@@ -25,19 +25,22 @@
   <![endif]-->
 </head>
 <body>
-  <div id="loading"><h3>教程加载中<blink>....</blink></h3></div>
-  <div class="container {{writeMode ? 'write-mode' : ''}}">
+  <div id="loading"><big>教程加载中<blink>....</blink></big></div>
+  <div id="container" class="container" b-on="events" write-mode?="writeMode">
     <div class=header>
-      <h1>Tutorials.js 使用教程</h1>
+      <h1 b-model=tutorial.title contenteditable?=writeMode></h1>
+
       <ul class="pager">
-        <li id='prev-chapter' title='上一章'><a href="javascript:;" class='btn {{chapterIndex > 1 ? "": "disabled"}}'>&lt;</a></li>
-        <li>{{chapterIndex}} / {{tutorials.length}}</li>
-        <li id='next-chapter' title='下一章'><a href="javascript:;" class='btn {{hasNextChapter?"":"disabled"}}'>&gt;</a></li>
+        <li id='prev-chapter' title='上一章'><a href="javascript:;" class='btn {{chapterIndex > 1 ? "" : "disabled"}}'>&lt;</a></li>
+        <li>{{chapterIndex}} / {{tutorial.list.length}}</li>
+        <li id='next-chapter' title='下一章'><a href="javascript:;" class='btn {{hasNextChapter ? "" : "disabled"}}'>&gt;</a></li>
       </ul>
-      <h2 a-model=chapter.title contenteditable?={{writeMode}}></h2>
-      <div class="write-mode-box" a-if=writeMode>
+      <h2 style="min-width:50px;" title?="writeMode && '在这里编辑章节标题'" b-model=chapter.title contenteditable?=writeMode></h2>
+      <div class="write-mode-box" b-if=writeMode>
+        <button class="btn btn-danger" id='rm_cur_step'>删除本节</button>
+        <button class="btn btn-danger" id='rm_cur_chapter'>删除本章</button>
         <button class="btn btn-primary" id="save">保存</button>
-        <a href='javascript:;' download='data.json' class="btn btn-primary" id="download">下载</a>
+        <a b-if=canDownload href='javascript:;' download='{{fileName}}' class="btn btn-primary" id="download">下载</a>
       </div>
     </div>
     <div class="row">
@@ -47,45 +50,50 @@
             <ul class="pager">
               <li id='prev-step' title='上一节'><a class='btn {{stepIndex > 1 ? "": "disabled"}}' href="javascript:;" class='btn'>&lt;</a></li>
               <li>{{stepIndex}} / {{chapter.steps.length}}</li>
-              <li class='next-step' title='下一节'><a  class='btn {{hasNextStep?"":"disabled"}}' href="javascript:;">&gt;</a></li>
+              <li class='next-step' title='下一节'><a  class='btn {{hasNextStep ? "": "disabled"}}' href="javascript:;">&gt;</a></li>
             </ul>
             <button class="btn btn-primary" id="reset">重置代码</button>
           </div>
-          <div class='panel-body' id="notes">{{{step.note | marked}}}</div>
-          <div class="btn-group btn-group-justified"><a href="javascript:;" class="btn btn-success fixcode {{step.fixCode ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a><a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
-        </div>
-        <div class='write-pad' a-if=writeMode>
-          <textarea placeholder="在此输入 markdown 教程内容." a-model=step.note class='form-control markdowneditor'></textarea>
-          <textarea class=form-control placeholder='自此输入每节自动运行的代码' a-model=step.init></textarea>
+          <div class='panel-body' id="notes">{{{marked(step.note)}}}</div>
+          <div class="btn-group btn-group-justified"><a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a><a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
         </div>
         <div class='panel panel-default output'>
-          <div class="panel-heading">内容预览:<div class="checkbox isfixed" a-if=writeMode><label>是否自动运行<input type="checkbox" a-model=step.autorun></label></div></div>
-          <div class=panel-body id="output"></div>
+          <div class="panel-heading">内容预览:<div class="checkbox isfixed" b-if=writeMode></div></div>
+          <div class=panel-body>
+            <iframe name="output" src="javascript:;" frameborder="0" style="width:100%"></iframe>
+          </div>
         </div>
       </div>
       <div class="col-lg-6 codes">
+        <div class='write-pad panel' b-if=writeMode>
+          <ul class="nav nav-tabs">
+            <li class='active'>
+              <a href="javascript:;">内容</a>
+            </li>
+            <li>
+              <a href="javascript:;">代码</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active">
+              <textarea placeholder="在此输入 markdown 教程内容." b-model=step.note class='form-control markdowneditor'></textarea></div>
+            <div class="tab-pane">
+              <textarea class=form-control title="这里输入的代码每节会自动运行" placeholder='自此输入每节自动运行的代码' b-model=step.init></textarea></div>
+          </div>
+        </div>
         <div class='html panel panel-default'>
           <div class=panel-heading>
-            <div class="checkbox isfixed" a-if=writeMode><label>是否补全代码<input type="checkbox" a-model=isFixHTML></label></div>
+            <div class="checkbox isfixed" b-if=writeMode><label><input type="checkbox" b-model=isFixHTML>作为补全代码</label></div>
             <h4>HTML</h4>
           </div>
-          <div class='code'><textarea id="template" a-model="step.html"></textarea></div>
+          <div class='code'><textarea id="template" b-model="step.html"></textarea></div>
         </div>
         <div class='javascript panel panel-default'>
           <div class=panel-heading>
-            <button class="exe btn btn-default" title="Ctrl + Enter 快速执行">执行代码</button>
-            <div class="checkbox isfixed" a-if=writeMode><label>是否补全代码<input type="checkbox" a-model=isFixJavascript></label></div>
+            <div class="checkbox isfixed" b-if=writeMode><label><input type="checkbox" b-model=isFixJavascript>作为补全代码</label></div>
             <h4>Javascript</h4>
           </div>
-          <div class='code'><textarea id="javascript" a-model=step.javascript></textarea></div>
-        </div>
-        <div class='console panel panel-default'>
-          <div class=panel-heading>
-            <button class="exe btn btn-default" title="Ctrl + Enter 快速执行">执行控制台</button>
-            <div class="checkbox isfixed" a-if=writeMode><label>是否补全代码<input type="checkbox" a-model=isFixConsole></label></div>
-            <h4>JS 控制台</h4>
-          </div>
-          <div class='code'><textarea id="console" a-model=step.console></textarea></div>
+          <div class='code'><textarea id="javascript" placeholder='//在此输入 javascript' b-model=step.javascript></textarea></div>
         </div>
       </div>
     </div>
@@ -93,6 +101,21 @@
   <h3 class="notsupport">
     本教程不支持 IE8 以下的浏览器! 请更换一个现代浏览器观看本教程.
   </h3>
+
+  <div class="footer">
+    <div class="container">
+      <div class="text-muted">
+        <p>
+          Build with Beejs by <a href="https://github.com/justan">@justan</a>
+        </p>
+        <p>
+          <a href="https://github.com/CFETeam/bee.js">Github</a>
+           -
+          <a href="https://github.com/CFETeam/bee.js/blob/master/docs/api.md">API</a>
+        </p>
+      </div>
+    </div>
+  </div>
 
   <script src="dist/app.js"></script>
 

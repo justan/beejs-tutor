@@ -1,1 +1,83 @@
-{"list":[{"steps":[{"note":"### 关于 tutorials.js\n\n\n`Tutorials.js` 是用来展示和编写 `Javascript` + `HTML` 类在线教程的工具.\n\n使用 tutorial.js 你可以快速的制作和 http://justan.github.io/tutorials.js, http://learn.ractivejs.org/ 及 http://learn.knockoutjs.com/  类似的一个在线互动教程.\n\n<button class='btn btn-info' id='intro'>界面介绍</button>\n\n","init":"tutor.off('click #intro')\ntutor.on('click #intro', function() {\n  $('body').off('click.intro');\n  setTimeout(function(){\n    $('body').on('click.intro', function(e) {intro && (!$(e.target).parents('.introjs-tooltip').length) && intro.exit()})\n  },0);\n  var intro = introJs();\n  intro.setOptions({\n    steps:[\n      {\n        element: $('.html .CodeMirror')[0],\n        intro: '这里是 HTML 模板区. 可以自由编辑 HTML 模板内容. 在该区域还支持 zen coding 快速编写哦!'\n      },\n      {\n        element: $('.javascript .CodeMirror')[0],\n        intro: '这里是 Javascript 代码区. 变量 html 代表 HTML 区的 DOM 元素.'\n      },\n      {\n        element: $('.javascript .exe')[0],\n        intro: '点击该按钮将会执行 HTML 区及 JS 区的内容, 并将其显示到内容预览区.'\n      },\n      {\n        element: $('.console .CodeMirror')[0],\n        intro: '这里是 Javascript 控制台区. 可以输入一些 js 代码来与上面的代码做些交互'\n      },\n      {\n        element: $('.console .exe')[0],\n        intro: '在控制台区写些代码, 然后点击该按钮, 看看执行的情况.'\n      },\n      {\n        element: $('#reset')[0],\n        intro: '修改了代码之后. 点击该按钮将会恢复教程原来的代码.'\n      },\n      {\n        element: $('.output')[0],\n        intro: '代码的运行后, HTML 内容将展现在这里.'\n      }\n    ]\n  });\n  intro.start();\n})","autorun":false,"html":" ","javascript":" ","console":" "},{"note":"### 界面介绍\n\nTutorials.js 的普通教程界面共有 5 各区域:\n\n1. <strong data-ref=\"board\">左上</strong>是教程内容区, 主要用于显示教程的主体文本区域\n2. <strong data-ref=\"output\">左下</strong>是内容预览区, 用于展示 HTML 区域与 JS 区域的运行结果\n3. <strong data-ref=\"html\">右上</strong>是 `HTML` 区域, 用户互动的 HTML 将显示在那里\n4. <strong data-ref=\"javascript\">右中</strong>是 `Javascript` 区域, 用于放置可执行可互动的 javascript 代码\n5. <strong data-ref=\"console>右下</strong>是 JS 控制台区域, 对于额外的 JS 代码可以放在那里\n\n```\ngit clone https://github.com/justan/tutorials.js.git\n```\n\n开始你的教程制作之旅吧","init":"","html":"<p>这里是 HTML 区域, 你教程的 HTML 内容可以写在这里</p>","javascript":"//这里是 JS 区, `html` 变量指代上面HTML区域的 DOM 元素\n//点击边上的执行代码按钮, 将执行 HTML 区域及 JS 区域的内容\nalert(html.innerHTML)","console":"//这里是 JS 控制台, 在这里可以执行 js 片段. 将会和上面的 JS 区有同样的作用域."}],"title":"Hello, tutorial.js！"},{"steps":[{"note":"### 所见即所得\n\n有了教程展示模板, 编写教程内容来适应这个模板似乎也是个问题.\n\n好在 `tutorial.js` 同时也自带了编辑模式, 使得你可以在同一界面下编写教程内容!\n\n在编辑模式下\n\n- 你可以使用 `markdown` 或 `html` 来编写教程主体内容\n- 在 `HTML, JS, console` 区编写该区域的展示内容及补全展示内容","html":"<p>这里是 HTML 区域, 你教程的 HTML 内容可以写在这里</p>","javascript":"//这里是 JS 区, `html` 变量指代上面HTML区域的 DOM 元素\n//点击边上的执行代码按钮, 将执行 HTML 区域及 JS 区域的内容\nalert(html.innerHTML)","console":"//这里是 JS 控制台, 在这里可以执行 js 片段. 将会和上面的 JS 区有同样的作用域."},{"note":"### 开启编辑模式\n\n在地址栏的 `#2/2` 后面输入 [`?write=true`][0] 即可进入编辑模式!\n\n在编辑模式里所有在文本框中输入的内容都可以点击右上的保存按钮保存到 [`localStorage`][1] 中.\n\n[0]: #2/2?write=true\n[1]: javascript:alert('你的教程内容:'+localStorage.tutorials)","html":"<p>这里是 HTML 区域, 你教程的 HTML 内容可以写在这里</p>","javascript":" ","console":"//这里是 JS 控制台, 在这里可以执行 js 片段. 将会和上面的 JS 区有同样的作用域."},{"note":"### 保存教程内容\n\n当你的教程编写完毕, 准备发布的时候. 你需要将教程内容保存到 `tutorials.js` 根目录的 `data.json` 当中.\n\n[完]","html":" ","javascript":" ","console":"//这里是 JS 控制台, 在这里可以执行 js 片段. 将会和上面的 JS 区有同样的作用域."}],"title":"编辑模式"}],"title":"Tutorial.js 使用教程"}
+{
+  "list": [
+    {
+      "steps": [
+        {
+          "note": "`new Bee`\n--\n\n---\n\n** [Beejs] ** 是一个面向现在 MVVM 库, 支持数据绑定及自定义标签功能.\n\n\n通过本教程希望您花上 10 分钟即可熟悉 beejs 的主要用法.\n\n---\n\n<a href=\"javascript:;\" class=\"bee-intro\">点击链接了解本教程的用法</a>\n\n\n[beejs]: https://github.com/CFETeam/bee.js",
+          "init": "$('body').off('click.bee-intro').on('click.bee-intro', '.bee-intro', function(e) {\n  setTimeout(function(){\n    $('body').off('click.intro').on('click.intro', function(e) {\n      if(intro && (!$(e.target).parents('.introjs-tooltip').length)){\n        intro.exit()\n        $('body').off('click.intro')\n      }\n    })\n  },0);\n  var intro = introJs();\n  intro.setOptions({\n    steps:[\n      {\n        element: $('.html .CodeMirror')[0],\n        intro: '这里是 HTML 模板区. 可以自由编辑 HTML 模板内容. 在该区域还支持 zen coding 快速编写哦!'\n      },\n      {\n        element: $('.javascript .CodeMirror')[0],\n        intro: '这里是 Javascript 代码区. 编写 js 与 HTML 交互.'\n      },\n      {\n        element: $('.javascript .exe')[0],\n        intro: '点击该按钮将会执行 HTML 区及 JS 区的内容, 并将其显示到内容预览区.'\n      },\n      {\n        element: $('#reset')[0],\n        intro: '修改了代码之后. 点击该按钮将会恢复教程原来的代码.'\n      },\n      {\n        element: $('.output')[0],\n        intro: '代码的运行后, HTML 内容将展现在这里.'\n      }\n    ]\n  });\n  intro.start();\n})",
+          "html": "<p>\n  在这里编写 HTML 代码\n</p>",
+          "javascript": "console.log('Hello Beejs!')",
+          "fixCode": {}
+        },
+        {
+          "note": "### 模板与 Javascript\n\n完整的 `Beejs` 程序包括模板和 Js 两部分.  \n\n`Beejs` 模板应该是标准的 `HTML` 片段. 可以为字符串或 DOM 元素. \n\n模板需要通过 `Bee` 构造函数进行解析生成一个 `bee` 实例 (**ViewModel 实例**) 才能发挥功能. ",
+          "init": "",
+          "html": "<div id=\"template\">\n  {{name}}\n</div>",
+          "javascript": "var bee = new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
+          "fixCode": {}
+        }
+      ],
+      "title": "Hello Beejs"
+    },
+    {
+      "steps": [
+        {
+          "note": "除了普通的 `HTML` 标签外,  在模板中 `beejs` 还具有两种特有标记: **指令(Directive)** 和 **表达式**.\n\n- 指令是来自 [angularJs] 中的概念. 在 `beejs` 中的指令都是带有 `b-` 前缀的 `HTML` 元素属性.\n- `Beejs` 中的表达式是 `javascript` 表达式的不严格子集. \n\n比如右侧示例模板中 `b-model=\"name\"` 就是一个指令. \n\n`{{name.split('').reverse().join('')}}` 则是一个使用在文本中的表达式. 表达式可以使用在普通文本位置及元素属性值上 (包括普通属性和指令).\n\n[angularJs]: https://angularjs.org",
+          "init": "",
+          "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  {{name.split('').reverse().join('')}}\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
+          "fixCode": {}
+        },
+        {
+          "note": "在模板中使用双重大括号  `{{}}` 表示表达式求值. \n\n点击 \"Run\" 按钮运行程序来查看结果.\n\n---\n\n对于内容中包括 `HTML` 标签的内容来说, 普通的双大括号输出是转义 (escape) 过后的内容. \n\n如果想输出非转义 (unescape) 的 `HTML` 内容,  可以使用三重大括号 `{{{}}}`. \n\n需要注意的一点是非转义内容在 `HTML` 属性中仍然会被转义.\n\n---\n\n试着输入框中输入 `HTML` 标签看下运行效果. 然后再点击补全代码按钮以观看非转义标签的效果.",
+          "init": "",
+          "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  <p title=\"名字: {{name}}\">{{name}}</p>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
+          "fixCode": {
+            "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  <p title=\"名字: {{{name}}}\">{{{name}}}</p>\n</div>",
+            "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: '<strong>Bee</strong>'\n  }\n})"
+          }
+        }
+      ],
+      "title": "Beejs 中的模板"
+    },
+    {
+      "steps": [
+        {
+          "note": ">在 `beejs` 中所有的功能都是基于指令完成的\n\n`Beejs` 中内置的指令包括: \n\n- [b-text], [b-html] 文本 / HTML 指令\n- [b-if] 条件指令\n- [b-repeat] Repeat 指令\n- [b-model]  双向绑定指令\n- [b-on] 事件指令\n- [b-attr] 属性指令\n- [b-style], [b-src] 样式 / src 指令\n- [b-content] 内容指令\n- [b-component] 组件指令\n\n\n[b-text]: #3/2\n[b-html]: #3/2\n[b-if]: #3/3\n[b-repeat]: #3/4\n[b-model]: #3/5\n[b-on]: #3/6\n[b-attr]: #3/7\n[b-style]: #3/8\n[b-src]: #3/8\n[b-content]: #3/9\n[b-component]: #3/10\n",
+          "init": "",
+          "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  <p title=\"名字: {{name}}\">{{name}}</p>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
+          "fixCode": {}
+        },
+        {
+          "note": "### b-text, b-html\n\n在文本中这两个指令分别等效于 `{{}}` 和 `{{{}}}` 表达式.\n\n这两个个指令与花括号表达式直接量的区别在于, 双重花括号表达式可用于属性之中. 而 `b-text, b-html` 指令只能用于文本内容.\n\n",
+          "init": "",
+          "html": "<div id=\"template\">\n  <span b-text=\"name\"></span>\n  <span b-html=\"name\"></span>\n  <hr />\n  {{name}}\n  {{{name}}}\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
+          "fixCode": {}
+        },
+        {
+          "note": "### b-if\n\n模板中的条件判断使用 `b-if` . 当 `b-if` 对应表达式中表达式值为假时, `b-if` 指令所在的节点将不会出现在 `DOM` 树中, 为真时则正常显示.\n\n修改 `isShow` 值为 `false` 查看效果.",
+          "init": "",
+          "html": "<div id=\"template\">\n  {{isShow}}\n  <p b-if=\"isShow\">当 isShow 为假时, 这段文字将从 DOM 树种移除</p>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    isShow: true\n  }\n})",
+          "fixCode": {
+            "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    isShow: false\n  }\n})"
+          }
+        },
+        {
+          "note": "### b-repeat\n\n`b-repeat` 指令用于显示数组中的内容. \n\nRepeat 指令中使用 `item in list` 这种语法, `item` 表示数组内容, `list` 为数组或者结果为数组的表达式. 另外使用 `$index` 表示条目在列表中的索引.\n\n",
+          "init": "",
+          "html": "<div id=\"template\">\n  <ul>\n  \t<li b-repeat=\"item in list\">{{$index + 1}}. {{item.name}}</li>\n  </ul>\n  <p>共 {{list.length}} 条</p>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    list: [\n      {name: 'Ant'},\n      {name: 'Bee'},\n      {name: 'Cicada'},\n      {name: 'Dragenfly'}\n    ]\n  }\n})",
+          "fixCode": {
+            "javascript": "var bee = new Bee(document.getElementById('template'), {\n  $data: {\n    list: [\n      {name: 'Ant'},\n      {name: 'Bee'},\n      {name: 'Cicada'},\n      {name: 'Dragenfly'}\n    ]\n  }\n})\n\nbee.list.push({name: 'earthworm'})"
+          }
+        }
+      ],
+      "title": "指令向导"
+    }
+  ],
+  "title": "Beejs 入门向导"
+}

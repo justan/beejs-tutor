@@ -1,7 +1,9 @@
 {
   "name": "tutorials-js",
   "version": "0.2.0",
-  "dependencies": {},
+  "dependencies": {
+    "beejs": "^0.3.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-usemin": "~2.0.2",
