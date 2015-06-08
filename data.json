@@ -77,10 +77,10 @@
         },
         {
           "note": "### 双向绑定\n\n`b-model` 指令负责双向绑定. 该指令主要用于表单各输入控件上. \n\n普通的 `input` 和 `textarea`  对应的值为字符串. \n\n`checkbox` 对应值为布尔值\n\n`radio`  则对应选中项的值\n\n普通 `select`  类似 `radio`, 带有 `multiple` 属性的多选 `select` 则对应一个数组.",
-          "html": "<div id=\"template\">\n  <ul>\n  \t<li>名字: {{name}}</li>\n   <li>动作: {{actions}}</li>\n  </ul>\n  <form action=\"javascript:;\">\n  \t<select b-model=\"name\">\n  \t\t<option value=\"Ant\">Ant</option>\n      <option value=\"Bee\">Bee</option>\n      <option value=\"Cicada\">Cicada</option>\n  \t</select>\n    <select multiple b-model=\"actions\">\n  \t\t<option value=\"fly\">飞</option>\n      <option value=\"deflower\">采花</option>\n  \t</select>\n  </form>\n</div>\n",
-          "javascript": "var bee = new Bee(document.getElementById('template'), {\n\t$data: {\n   \tname: 'Ant',\n   \ttype: true\n   }\n});\n\n",
+          "html": "<div id=\"template\">\n  <ul>\n  \t<li>名字: {{name}}</li>\n   <li>昆虫?:{{insect}}</li>\n   <li>性别: {{sex}}</li>\n  </ul>\n  <form action=\"javascript:;\">\n\t<div>名称: <input b-model=\"name\" type=\"text\" /></div>\n   <div>昆虫?:<input type=\"checkbox\" b-model=\"insect\" /></div>\n    <div>性别: \n    \t<label>雌: \n        <input type=\"radio\" name=\"sex\" b-model=\"sex\" value=\"female\" />\n       </label>\n    \t<label>雄: \n        <input type=\"radio\" name=\"sex\" b-model=\"sex\" value=\"male\" />\n       </label>\n    \t<label>Unknow: \n        <input type=\"radio\" name=\"sex\" b-model=\"sex\" value=\"unknow\" />\n       </label>\n    </div>\n  </form>\n</div>\n",
+          "javascript": "var bee = new Bee(document.getElementById('template'), {\n\t$data: {\n   \t\tname: 'Ant',\n   \t\tinsect: true,\n\t    sex: 'unknow'\n   }\n});\n\n",
           "fixCode": {
-            "javascript": "var bee = new Bee(document.getElementById('template'), {\n\t$data: {\n   \tname: 'Ant',\n   \ttype: true\n   }\n});\n\n",
+            "javascript": "var bee = new Bee(document.getElementById('template'), {\n\t$data: {\n  \t \tname: 'Ant'\n   }\n});\n\n",
             "html": "<div id=\"template\">\n  <ul>\n  \t<li>名字: {{name}}</li>\n   <li>动作: {{actions}}</li>\n  </ul>\n  <form action=\"javascript:;\">\n  \t<select b-model=\"name\">\n  \t\t<option value=\"Ant\">Ant</option>\n      <option value=\"Bee\">Bee</option>\n      <option value=\"Cicada\">Cicada</option>\n  \t</select>\n    <select multiple b-model=\"actions\">\n  \t\t<option value=\"fly\">飞</option>\n      <option value=\"deflower\">采花</option>\n  \t</select>\n  </form>\n</div>\n"
           }
         }
