@@ -3,7 +3,7 @@
     {
       "steps": [
         {
-          "note": "`new Bee`\n--\n\n---\n\n** [Beejs] ** 是一个面向现在 MVVM 库, 支持数据绑定及自定义标签功能.\n\n\n通过本教程希望您花上 10 分钟即可熟悉 beejs 的主要用法.\n\n---\n\n<a href=\"javascript:;\" class=\"bee-intro\">点击链接了解本教程的用法</a>\n\n\n[beejs]: https://github.com/CFETeam/bee.js",
+          "note": "`new Bee`\n--\n\n---\n\n** [Beejs] ** 是一个面向现在 MVVM 库, 支持数据绑定及自定义标签功能.\n\n\n通过本教程希望您花上 15 分钟即可熟悉 beejs 的主要用法.\n\n---\n\n<a href=\"javascript:;\" class=\"bee-intro\">点击链接了解本教程的用法</a>\n\n\n[beejs]: https://github.com/CFETeam/bee.js",
           "init": "$('body').off('click.bee-intro').on('click.bee-intro', '.bee-intro', function(e) {\n  setTimeout(function(){\n    $('body').off('click.intro').on('click.intro', function(e) {\n      if(intro && (!$(e.target).parents('.introjs-tooltip').length)){\n        intro.exit()\n        $('body').off('click.intro')\n      }\n    })\n  },0);\n  var intro = introJs();\n  intro.setOptions({\n    steps:[\n      {\n        element: $('.html .CodeMirror')[0],\n        intro: '这里是 HTML 模板区. 可以自由编辑 HTML 模板内容. 在该区域还支持 zen coding 快速编写哦!'\n      },\n      {\n        element: $('.javascript .CodeMirror')[0],\n        intro: '这里是 Javascript 代码区. 编写 js 与 HTML 交互.'\n      },\n      {\n        element: $('.javascript .exe')[0],\n        intro: '点击该按钮将会执行 HTML 区及 JS 区的内容, 并将其显示到内容预览区.'\n      },\n      {\n        element: $('#reset')[0],\n        intro: '修改了代码之后. 点击该按钮将会恢复教程原来的代码.'\n      },\n      {\n        element: $('.output')[0],\n        intro: '代码的运行后, HTML 内容将展现在这里.'\n      }\n    ]\n  });\n  intro.start();\n})",
           "html": "<p>\n  在这里编写 HTML 代码\n</p>",
           "javascript": "console.log('Hello Beejs!')",
@@ -44,7 +44,7 @@
     {
       "steps": [
         {
-          "note": ">在 `beejs` 中所有的功能都是基于指令完成的\n\n`Beejs` 中内置的指令包括: \n\n- [b-text], [b-html] 文本 / HTML 指令\n- [b-if] 条件指令\n- [b-repeat] Repeat 指令\n- [b-model]  双向绑定指令\n- [b-on] 事件指令\n- [b-attr] 属性指令\n- [b-style], [b-src] 样式 / src 指令\n- [b-content] 内容指令\n- [b-component] 组件指令\n\n\n[b-text]: #3/2\n[b-html]: #3/2\n[b-if]: #3/3\n[b-repeat]: #3/4\n[b-model]: #3/5\n[b-on]: #3/6\n[b-attr]: #3/7\n[b-style]: #3/8\n[b-src]: #3/8\n[b-content]: #3/9\n[b-component]: #3/10\n",
+          "note": "  指令 (directive) 是来自 angularJs 中的概念. 其用特定的属性增强了 HTML 的功能.\n\n在 `beejs` 中主要功能都是基于指令完成的.  `Beejs` 中内置的指令包括: \n\n- [b-text], [b-html] 文本 / HTML 指令\n- [b-if] 条件指令\n- [b-repeat] Repeat 指令\n- [b-model]  双向绑定指令\n- [b-on] 事件指令\n- [b-attr] 属性指令\n- [b-style], [b-src] 样式 / src 指令\n- [b-content] 内容指令\n- [b-component] 组件指令\n\n\n[b-text]: #3/2\n[b-html]: #3/2\n[b-if]: #3/3\n[b-repeat]: #3/4\n[b-model]: #3/5\n[b-on]: #3/6\n[b-attr]: #3/7\n[b-style]: #3/8\n[b-src]: #3/8\n[b-content]: #3/9\n[b-component]: #3/10\n",
           "init": "",
           "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  <p title=\"名字: {{name}}\">{{name}}</p>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
@@ -83,9 +83,54 @@
             "javascript": "var bee = new Bee(document.getElementById('template'), {\n\t$data: {\n  \t \tname: 'Ant'\n   }\n});\n\n",
             "html": "<div id=\"template\">\n  <ul>\n  \t<li>名字: {{name}}</li>\n   <li>动作: {{actions}}</li>\n  </ul>\n  <form action=\"javascript:;\">\n  \t<select b-model=\"name\">\n  \t\t<option value=\"Ant\">Ant</option>\n      <option value=\"Bee\">Bee</option>\n      <option value=\"Cicada\">Cicada</option>\n  \t</select>\n    <select multiple b-model=\"actions\">\n  \t\t<option value=\"fly\">飞</option>\n      <option value=\"deflower\">采花</option>\n  \t</select>\n  </form>\n</div>\n"
           }
+        },
+        {
+          "note": "### 事件\n\n通过 `b-on`  指令我们可以进行事件处理.   \n\n`b-on` 指令的值是一个包含了事件名及处理函数的对象.  事件处理函数内的 `this` 指向当前 `bee` 实例.\n\n`b-on` 指令还提供了基本的事件委托功能, 在事件名后写上选择器即可:\n```\n{\n  'click li': function(e) { \n    //dosth here\n   }\n}\n```\n",
+          "html": "<div id=\"template\">\n  <button b-on=\"{click: clear}\">清空</button>\n  <div b-on=\"events\">\n      事件日志: \n      <ul>\n          <li b-repeat=\"item in actions\">{{item}}</li>\n      </ul>\n  </div>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n  \t$data: {\n      actions : []\n\t},\n\tevents: {\n      click: function() { this.actions.unshift('click!') },\n      mouseenter: function() { this.actions.unshift('mouseenter!') },\n      mouseleave: function() { this.actions.unshift('mouseleave!') }\n   },\n   clear: function() {\n      this.actions.splice(0, this.actions.length)\n   }\n})",
+          "fixCode": {
+            "javascript": "new Bee(document.getElementById('template'), {\n  \t$data: {\n      actions : []\n\t},\n\tevents: {\n      click: function() { this.actions.unshift('click!') },\n      mouseenter: function() { this.actions.unshift('mouseenter!') },\n      mouseleave: function() { this.actions.unshift('mouseleave!') },\n      'click li': function() { this.actions.unshift('click li!') }\n   },\n   clear: function() {\n      this.actions.splice(0, this.actions.length)\n   }\n})"
+          }
+        },
+        {
+          "note": "### b-attr\n\n`HTML` 属性指令 `b-attr` 的值为一个对象, 会映射成节点的 `HTML` 属性.\n\n写法 `attribute=\"{{expression}}\"` 是 `b-attr` 指令的一个特例, 这种写法只针对单个属性.\n\n另外一种 `b-attr` 的特例是条件属性,  其语法是: `attribute?=\"expression\"`. 后面表达式为真时, 属性插入, 表达式为假时, 属性移除. 这种写法对一些 `Boolean` 属性比较有用, 比如表单元素的: `readonly, disabled` 等.",
+          "html": "<div id=\"template\">\n\t<div b-attr=\"attr\">b-attr 展示区. 可以添加任何属性了</div>\n  \t<!-- value=\"{{attr.style}}\" 不具备双向绑定功能. 想要双向绑定请使用 b-model=\"attr.style\" -->\n  \t<input b-model=\"attr.style\" disabled?=\"disabled\" type=\"text\" />\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n    \tattr: {\n \t\t\tstyle: 'color:red'\n    \t},\n    \tdisabled: false\n    }\n})",
+          "fixCode": {}
+        },
+        {
+          "note": "### b-style\n\n样式指令 `b-sytle` 接受字符串或对象类型的值.  如: `b-style=\"{color: 'green'}\"`, `b-style=\"'color: green'\"` 都是合法的 `b-style` 指令.\n\n当 `b-style` 指令值为对象时, 驼峰式的 `javascript` 属性将转换成 `-` 连接符的 `css` 属性. \n\n需要注意的一点是 `style=\"{{expression}}\"` 这种写法在 IE 浏览器中无效, 因为 IE 浏览器在解析 `style` 属性时会将它认为不合法的属性值移除掉, 造成 `beejs` 没有机会读取表达式的内容.\n\n### b-src\n\n普通的 `src` 属性表达式写法 `src=\"{{src}}\"` 可能会想服务器发送一条 url 为 `{{src}}` 的无效请求. 所以应该使用 `b-src` 指令替代.\n",
+          "html": "<div id=\"template\">\n\t<p b-style=\"style\">晚上要不要看球?</p>\n\t<p b-style=\"'color: ' + style.color\">困=_=. 明天看录播吧</p>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n   \t\tstyle: {\n        color: 'red',\n        fontSize: '2em'\n   \t\t}\n   }\n})",
+          "fixCode": {}
+        },
+        {
+          "note": "### b-content\n\n`b-content` 是比 `b-text` 和 `b-html` 更为强大的内容输出指令.\n\n 除了支持普通的字符串, HTML片段外, `b-content` 还支持子模板的解析与输出.\n\n`b-content`   指令的值可以是普通字符串, `HTML` 标签片段, 或 `DOM` 元素.",
+          "html": "<div id=\"template\">\n\t<span b-content=\"content1\"></span>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n      name: 'Bee'\n   },\n  \tcontent1: '{{name}}'\n})",
+          "fixCode": {
+            "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n      name: 'Bee',\n      otherName: 'Cicada'\n   },\n  \tcontent1: '{{name}} - <span b-content=\"content2\"></span>',\n\tcontent2: '<big>{{otherName}}</big>'\n})"
+          }
+        },
+        {
+          "note": "### b-component 组件\n\n使用一个组件之前, 需要先定义它.  在 `beejs` 中, 组件就是继承 `Bee` 构造函数的一个子构造函数. \n\n使用 `Bee.extend` 方法创建一个子构造函数: \n```js\nvar MyAwesomeComponent = Bee.extend({\n  //原型属性\n})\n```\n\n然后通过 `Bee.component` 注册这个组件: \n\n```js\nBee.component('my-awesome', MyAwesomeComponent)\n```\n\n自定义标签就是基于组件指令, 比如 `<my-awesome></my-awesome>` 等同于 `<span b-component=\"my-awesome\"></span>`\n\n关于组件的内容, 我们会有专门内容进行叙述.",
+          "html": "<div id=\"template\">\n\t<span b-component=\"my-awesome\"></span>\n</div>",
+          "javascript": "var MyAwesomeComponent = Bee.extend({\n  $tpl: '<div>啥? 这就是一个组件!</div>'\n})\n\nBee.component('my-awesome', MyAwesomeComponent)\n\nnew Bee(document.getElementById('template'))",
+          "fixCode": {
+            "html": "<div id=\"template\">\n\t<span b-component=\"my-awesome\"></span>\n  \t<my-awesome></my-awesome>\n</div>"
+          }
         }
       ],
       "title": "指令向导"
+    },
+    {
+      "steps": [
+        {
+          "note": "`Beejs` 中同样存在过滤器(filter) 的概念, 过滤器是一类专有的内容处理函数.",
+          "fixCode": {}
+        }
+      ],
+      "title": "过滤器(filter)"
     }
   ],
   "title": "Beejs 入门向导"
