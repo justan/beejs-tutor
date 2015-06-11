@@ -40,9 +40,9 @@
       <h1 b-model=tutorial.title contenteditable?=writeMode></h1>
 
       <ul class="pager">
-        <li id='prev-chapter' title='上一章'><a href="javascript:;" class='btn {{chapterIndex > 1 ? "" : "disabled"}}'>&lt;</a></li>
+        <li id='prev-chapter' title='上一章' class='btn {{chapterIndex > 1 ? "" : "disabled"}}'><a href="javascript:;">&lt;</a></li>
         <li>{{chapterIndex}} / {{tutorial.list.length}}</li>
-        <li id='next-chapter' title='下一章'><a href="javascript:;" class='btn {{hasNextChapter ? "" : "disabled"}}'>&gt;</a></li>
+        <li id='next-chapter' title='下一章' class='btn {{hasNextChapter ? "" : "disabled"}}'><a href="javascript:;">&gt;</a></li>
       </ul>
       <h2 style="min-width:50px;" title?="writeMode && '在这里编辑章节标题'" b-model=chapter.title contenteditable?=writeMode></h2>
       <div class="write-mode-box" b-if=writeMode>
@@ -57,14 +57,16 @@
         <div class='panel panel-default board'>
           <div class=panel-heading>
             <ul class="pager">
-              <li id='prev-step' title='上一节'><a class='btn {{stepIndex > 1 ? "": "disabled"}}' href="javascript:;" class='btn'>&lt;</a></li>
+              <li id='prev-step' title='上一节' class='btn {{stepIndex > 1 ? "": "disabled"}}'><a href="javascript:;" class='btn'>&lt;</a></li>
               <li>{{stepIndex}} / {{chapter.steps.length}}</li>
-              <li class='next-step' title='下一节'><a  class='btn {{hasNextStep ? "": "disabled"}}' href="javascript:;">&gt;</a></li>
+              <li class='next-step' title='下一节' class='btn {{hasNextStep ? "": "disabled"}}'><a  href="javascript:;">&gt;</a></li>
             </ul>
             <button class="btn btn-primary" id="reset">重置代码</button>
           </div>
           <div class='panel-body' id="notes">{{{marked(step.note)}}}</div>
-          <div class="btn-group btn-group-justified"><a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a><a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
+          <div class="btn-group btn-group-justified">
+            <a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a>
+            <a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
         </div>
         <div class='panel panel-default output'>
           <div class="panel-heading">内容预览:<div class="checkbox isfixed" b-if=writeMode></div></div>

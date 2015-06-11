@@ -34,13 +34,13 @@ $(function() {
         return marked(note);
       }
     , events: {
-        'click #prev-step a:not(.disabled)': function() {
+        'click #prev-step:not(.disabled)': function() {
           if(this.stepIndex > 1){
             //this.setStep(this.stepIndex - 2);
             this.navigate(this.chapterIndex + '/' + (this.stepIndex - 1))
           }
         }
-      , 'click .next-step a:not(.disabled)': function() {
+      , 'click .next-step:not(.disabled)': function() {
           if(this.stepIndex < this.$get('chapter.steps').length || this.writeMode){
             //this.setStep(this.stepIndex);
             this.navigate(this.chapterIndex + '/' + (this.stepIndex + 1));
@@ -48,12 +48,12 @@ $(function() {
             this.navigate(this.chapterIndex + 1);
           }
         }
-      , 'click #prev-chapter a:not(.disabled)': function() {
+      , 'click #prev-chapter:not(.disabled)': function() {
           if(this.chapterIndex > 1){
             this.navigate(this.chapterIndex - 1);
           }
         }
-      , 'click #next-chapter a:not(.disabled)': function() {
+      , 'click #next-chapter:not(.disabled)': function() {
           if(this.chapterIndex < this.$get('tutorial.list').length || this.writeMode){
             //this.setChapter(this.chapterIndex);
             this.navigate(this.chapterIndex + 1);
