@@ -67,7 +67,7 @@
           }
         },
         {
-          "note": "### b-repeat\n\n`b-repeat` 指令用于显示数组中的内容. \n\nRepeat 指令中使用 `item in list` 这种语法, `item` 表示数组内容, `list` 为数组或者结果为数组的表达式. 另外使用 `$index` 表示条目在列表中的索引.\n\n对于 `b-repeat` 指令目标数组 `list`, `beejs` 会为其添加三个操作方法: `$set, $replace, $remove`.\n\n另外 `beejs` 会监控该数组的操作方法 `splice, push, pop, shift, unshift, sort, reverse`, 并更新界面.",
+          "note": "### b-repeat\n\n`b-repeat` 指令用于显示数组中的内容. \n\nRepeat 指令中使用 `item in list` 这种语法, `item` 表示数组内容, `list` 为数组或者结果为数组的表达式. 另外使用 `$index` 表示条目在列表中的索引.\n\n对于 `b-repeat` 指令目标数组 `list`, `beejs` 会为其添加三个操作方法: `$set, $replace, $remove`.\n\n另外 `beejs` 会监控该数组的操作方法 `splice, push, pop, shift, unshift, sort, reverse`, 并更新界面.\n\n注意: `b-repeat` 和 `b-if` 不要在同一节点上使用. 请直接对数组进行过滤.",
           "init": "",
           "html": "<div id=\"template\">\n  <ul>\n  \t<li b-repeat=\"item in list\">{{$index + 1}}. {{item.name}}</li>\n  </ul>\n  <p>共 {{list.length}} 条</p>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    list: [\n      {name: 'Ant'},\n      {name: 'Bee'},\n      {name: 'Cicada'},\n      {name: 'Dragenfly'}\n    ]\n  }\n})",
@@ -126,8 +126,28 @@
     {
       "steps": [
         {
-          "note": "`Beejs` 中同样存在过滤器(filter) 的概念, 过滤器是一类专有的内容处理函数.",
+          "note": "`Beejs` 中同样存在过滤器(filter) 的概念, 过滤器是一类专门处理内容的函数.  在模板使用 `|` 操作符调用 `filter`. 额外的参数配合使用 `:` 操作符表示.\n\n```\n{{obj | json : null : 2}}\n```\n\n在使用 `filter` 前必须使用 `Bee.filter` 方法先定义它: \n\n```js\nBee.filter('reverse', function(str) {\n  return str.split('').reverse().join('')\n})\n```\n\n你可以链式使用 `filter`: \n\n```\n{{obj | json | reverse}}\n```",
+          "html": "<div id=\"template\">\n<pre>\n{{obj | json : null : 2 }}\n</pre>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n    \tobj: {\n      \t\tname: 'Bee'\n   \t\t}\n    }\n})",
+          "fixCode": {
+            "javascript": "Bee.filter('reverse', function(str) {\n  return str.split('').reverse().join('')\n})\nnew Bee(document.getElementById('template'), {\n\t$data: {\n    \tobj: {\n      \t\tname: 'Bee'\n   \t\t}\n    }\n})",
+            "html": "<div id=\"template\">\n<pre>\n{{obj | json : null : 2 | reverse}}\n</pre>\n</div>"
+          }
+        },
+        {
+          "note": "### 普通方法与 filter\n\n一般情况下, `filter` 与普通的 `bee` 实例方法功能上很相似: 他们都是可以在模板中调用的函数.\n\n尽管这两者在一些场景下可以互相替换, 但还是请注意这它们的区别: \n\n1. 定义的位置不同. `filter` 通过静态方法 `Bee.filter` 定义在构造函数属性 `Bee.filters` 中.\n而方法都是实例方法, 没个实例可能都有不同的方法. 所以应该将更加通用的处理函数定义在 `filter` 中.\n2. `Filter` 对 [Promise]  对象的链式支持更加友好.  `Promise` 在 `beejs` 中的使用看下节.\n\n\n\n\n[Promise]:  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+          "html": "<div id=\"template\">\n  <pre>\njson filter:\n{{obj | json : null : 2}}\n\njson method:\n{{json(obj, null, 2)}}\n  </pre>\n</div>",
+          "javascript": "//json filter 与 filter 方法\nnew Bee(document.getElementById('template'), {\n\t$data: {\n    \tobj: {\n      \t\tname: 'Bee'\n   \t\t}\n    },\n  \tjson: function(obj, replacer, space) {\n    \treturn JSON.stringify(obj, replacer, space)\n    }\n})",
           "fixCode": {}
+        },
+        {
+          "note": "### promise\n\n**这节的内容目前是实验性支持. 请谨慎使用**\n\n在 `beejs` 的模板中支持 `promise` 对象的展示. 模板中返回的 `promise` 或者类 `promise` 对象(如: jQeury 中的 promise)都在其成功之后更新界面. \n\n如果将一个 `promise` 对象通过 `|` 操作符传递给一个 `filter`, 该 `filter` 函数并不会直接接收到该 `promise` 对象, 而是在这个 `promise` 对象成功回调之后 `filter` 函数会收到 `promise` 的成功返回值\n\n",
+          "html": "<div id=\"template\">\n  <pre>\n{{getTutor()}}\n  </pre>\n</div>",
+          "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n    \t\n    },\n  \tgetTutor: function() {\n      return  $.ajax('data.json', {dataType: 'text'})\n    }\n})",
+          "fixCode": {
+            "html": "<div id=\"template\">\n第 {{chapterIndex + 1}} 章 第 {{stepIndex + 1}} 节的 JSON 数据: \n  <pre>\n{{getTutor() | getSteps : chapterIndex : stepIndex}}\n  </pre>\n</div>",
+            "javascript": "Bee.filter('getSteps', function(tutor, chapter, step) {\n\tvar data = tutor.list[chapter] && tutor.list[chapter].steps[step] || {};\n\treturn JSON.stringify(data, null, 2)\n})\nnew Bee(document.getElementById('template'), {\n\t$data: {\n   \t\tchapterIndex: 3,\n\t\t stepIndex: 2\n   },\n  \tgetTutor: function() {\n      return  $.ajax('data.json')\n    }\n})"
+          }
         }
       ],
       "title": "过滤器(filter)"

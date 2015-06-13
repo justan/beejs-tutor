@@ -10,8 +10,11 @@ html{
 }
 #container{
   display: none;
-  max-width: 1420px;
   padding: 0 0 70px;
+}
+
+.container-fluid{
+  max-width: 1420px;
 }
 
 .CodeMirror{
@@ -87,7 +90,7 @@ html{
 }
 
 .write-pad textarea{
-  min-height: 250px;
+  min-height: 500px;
 }
 .markdowneditor{
   color: #E0E0E0;
@@ -107,6 +110,7 @@ html{
 .footer{
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 100%;
   background-color: #f5f5f5;
   text-align: right;

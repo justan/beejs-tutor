@@ -26,7 +26,7 @@ $(function() {
         var html = htmlCm.getValue();
         output.open();
         output.write(html)
-        output.write('<script> Bee = top.Bee </script>')
+        output.write('<script> Bee = top.Bee; $ = top.$ </script>')
         output.write('<script>' + jsCm.getValue() + '</script>');
         output.close()
       }
@@ -61,8 +61,10 @@ $(function() {
         }
       , 'click .fixcode': function(e){
           if(!$(e.target).hasClass('disabled') && this.step.fixCode){
-             this.step.fixCode.html && htmlCm.setValue(this.step.fixCode.html);
-             this.step.fixCode.javascript && jsCm.setValue(this.step.fixCode.javascript);
+             this.$set({
+               isFixHTML: true,
+               isFixJavascript: true
+             })
           }
         }
       , 'click #reset': function(e){
@@ -100,15 +102,10 @@ $(function() {
           }
         }
       }
-    , $watchers : {
-        '(chapter.title || "") + " - " + tutorial.title': function(val) {
-          document.title = val;
-        }
-      }
     , $afterInit: function() {
         var that = this;
         $('#loading').fadeOut();
-        $(this.$el).fadeIn();
+        this.$set('show', true)
         htmlCm = CodeMirror.fromTextArea(document.getElementById('template'), {
           lineNumbers: true
         , lineWrapping: true
@@ -132,6 +129,18 @@ $(function() {
           that.run()
         })
 
+        this.$watch('(chapter.title || "") + " - " + tutorial.title', function(val) {
+          document.title = val;
+        })
+
+        this.$watch('isFixHTML', function(fix) {
+          htmlCm.setValue(fix && this.step.fixCode.html || this.step.html);
+        })
+
+        this.$watch('isFixJavascript', function(fix) {
+          jsCm.setValue(fix && this.step.fixCode.javascript || this.step.javascript);
+        })
+
         //this.setChapter(0);
       }
     , setStep: function(index) {
@@ -143,8 +152,11 @@ $(function() {
           steps.push(step);
         }
         this.$replace('step', step);
+
         this.$set({
-          stepIndex: index + 1
+          isFixHTML: false
+        , isFixJavascript: false
+        , stepIndex: index + 1
         , hasNextStep: index < this.chapter.steps.length - 1 || this.hasNextChapter || this.writeMode
         });
         htmlCm.setValue($('#template').val());
@@ -186,7 +198,7 @@ $(function() {
       }
 
       //保存数据到 localStorage
-    , save: function(){
+    , getData: function() {
         var fixCode = this.step.fixCode || {};
         var step = {
               note: this.step.note
@@ -209,8 +221,12 @@ $(function() {
         this.tutorial.list[this.chapterIndex - 1].title = this.chapter.title;
         this.tutorial.list[this.chapterIndex - 1].steps.splice(this.stepIndex - 1, 1, step);
         dataStr = JSON.stringify(this.tutorial, null, 2)
-        localStorage.setItem('tutorial-' + filePath, dataStr);
         return dataStr;
+      }
+    , save: function(){
+        var data = this.getData()
+        localStorage.setItem('tutorial-' + filePath, data);
+        return data;
       }
     });
 

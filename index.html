@@ -26,14 +26,14 @@
 </head>
 <body>
   <div id="loading"><big>教程加载中<blink>....</blink></big></div>
-  <div id="container" class="container-fluid" b-on="events" write-mode?="writeMode">
+  <div id="container" class="container-fluid" b-on="events" write-mode?="writeMode" b-style="{maxWidth: (writeMode ? '95%' : ''), display: show ? 'block' : 'none'}">
     <div class=header>
       <h1 b-model=tutorial.title contenteditable?=writeMode></h1>
 
       <ul class="pager">
-        <li id='prev-chapter' title='上一章' class='btn {{chapterIndex > 1 ? "" : "disabled"}}'><a href="javascript:;">&lt;</a></li>
+        <li id='prev-chapter' title='上一章' class='btn {{chapterIndex > 1 ? "" : "disabled"}}'><a href="javascript:;">&lt;&lt;</a></li>
         <li>{{chapterIndex}} / {{tutorial.list.length}}</li>
-        <li id='next-chapter' title='下一章' class='btn {{hasNextChapter ? "" : "disabled"}}'><a href="javascript:;">&gt;</a></li>
+        <li id='next-chapter' title='下一章' class='btn {{hasNextChapter ? "" : "disabled"}}'><a href="javascript:;">&gt;&gt;</a></li>
       </ul>
       <h2 style="min-width:50px;" title?="writeMode && '在这里编辑章节标题'" b-model=chapter.title contenteditable?=writeMode></h2>
       <div class="write-mode-box" b-if=writeMode>
@@ -44,30 +44,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-6">
-        <div class='panel panel-default board'>
-          <div class=panel-heading>
-            <ul class="pager">
-              <li id='prev-step' title='上一节' class='btn {{stepIndex > 1 ? "": "disabled"}}'><a href="javascript:;" class='btn'>&lt;</a></li>
-              <li>{{stepIndex}} / {{chapter.steps.length}}</li>
-              <li class='next-step' title='下一节' class='btn {{hasNextStep ? "": "disabled"}}'><a  href="javascript:;">&gt;</a></li>
-            </ul>
-            <button class="btn btn-primary" id="reset">重置代码</button>
-          </div>
-          <div class='panel-body' id="notes">{{{marked(step.note)}}}</div>
-          <div class="btn-group btn-group-justified">
-            <a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a>
-            <a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
-        </div>
-        <div class='panel panel-default output'>
-          <div class="panel-heading">内容预览:<div class="checkbox isfixed" b-if=writeMode></div></div>
-          <div class=panel-body>
-            <iframe name="output" src="javascript:;" frameborder="0" style="width:100%; height: 175px;"></iframe>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6 codes">
-        <div class='write-pad panel' b-if=writeMode>
+      <div b-if="writeMode" class="col-lg-4">
+        <div class='write-pad panel'>
           <ul class="nav nav-tabs">
             <li class='active'>
               <a href="javascript:;">内容</a>
@@ -83,6 +61,30 @@
               <textarea class=form-control title="这里输入的代码每节会自动运行" placeholder='自此输入每节自动运行的代码' b-model=step.init></textarea></div>
           </div>
         </div>
+      </div>
+      <div class="{{writeMode ? 'col-lg-4' : 'col-lg-6'}}">
+        <div class='panel panel-default board'>
+          <div class=panel-heading>
+            <ul class="pager">
+              <li id='prev-step' title='上一节' class='btn {{stepIndex > 1 ? "": "disabled"}}'><a href="javascript:;" class='btn'>&lt;</a></li>
+              <li>{{stepIndex}} / {{chapter.steps.length}}</li>
+              <li class='next-step btn {{hasNextStep ? "": "disabled"}}' title='下一节'><a  href="javascript:;">&gt;</a></li>
+            </ul>
+            <button class="btn btn-primary" id="reset">重置代码</button>
+          </div>
+          <div class='panel-body' id="notes">{{{marked(step.note)}}}</div>
+          <div class="btn-group btn-group-justified">
+            <a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a>
+            <a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
+        </div>
+        <div class='panel panel-default output'>
+          <div class="panel-heading">内容预览:<div class="checkbox isfixed" b-if=writeMode></div></div>
+          <div class=panel-body>
+            <iframe name="output" src="javascript:;" frameborder="0" style="width:100%; height: 175px;"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="{{writeMode ? 'col-lg-4' : 'col-lg-6'}} codes">
         <div class='html panel panel-default'>
           <div class=panel-heading>
             <div class="checkbox isfixed" b-if=writeMode><label><input type="checkbox" b-model=isFixHTML>作为补全代码</label></div>
@@ -99,25 +101,26 @@
         </div>
       </div>
     </div>
+
+    <div class="footer">
+      <div class="container-fluid">
+        <div class="text-muted">
+          <p>
+            Build with Beejs by <a href="https://github.com/justan">@justan</a>
+          </p>
+          <p>
+            <a href="https://github.com/CFETeam/bee.js">Github</a>
+             -
+            <a href="https://github.com/CFETeam/bee.js/blob/master/docs/api.md">API</a>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
   <h3 class="notsupport">
     本教程不支持 IE8 以下的浏览器! 请更换一个现代浏览器观看本教程.
   </h3>
 
-  <div class="footer">
-    <div class="container">
-      <div class="text-muted">
-        <p>
-          Build with Beejs by <a href="https://github.com/justan">@justan</a>
-        </p>
-        <p>
-          <a href="https://github.com/CFETeam/bee.js">Github</a>
-           -
-          <a href="https://github.com/CFETeam/bee.js/blob/master/docs/api.md">API</a>
-        </p>
-      </div>
-    </div>
-  </div>
 
   <script src="dist/app.js"></script>
 
