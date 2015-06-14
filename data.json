@@ -3,7 +3,7 @@
     {
       "steps": [
         {
-          "note": "`new Bee`\n--\n\n---\n\n** [Beejs] ** 是一个面向现在 MVVM 库, 支持数据绑定及自定义标签功能.\n\n\n通过本教程希望您花上 15 分钟即可熟悉 beejs 的主要用法.\n\n---\n\n<a href=\"javascript:;\" class=\"bee-intro\">点击链接了解本教程的用法</a>\n\n\n[beejs]: https://github.com/CFETeam/bee.js",
+          "note": "`new Bee`\n--\n\n---\n\n** [Beejs] ** 是一个面向当下浏览器环境的 MVVM 库, 支持数据绑定及自定义标签功能.\n\n\n通过本教程希望您花上 15 分钟即可熟悉 beejs 的主要用法.\n\n---\n\n<a href=\"javascript:;\" class=\"bee-intro\">点击链接了解本教程的用法</a>\n\n\n[beejs]: https://github.com/CFETeam/bee.js",
           "init": "$('body').off('click.bee-intro').on('click.bee-intro', '.bee-intro', function(e) {\n  setTimeout(function(){\n    $('body').off('click.intro').on('click.intro', function(e) {\n      if(intro && (!$(e.target).parents('.introjs-tooltip').length)){\n        intro.exit()\n        $('body').off('click.intro')\n      }\n    })\n  },0);\n  var intro = introJs();\n  intro.setOptions({\n    steps:[\n      {\n        element: $('.html .CodeMirror')[0],\n        intro: '这里是 HTML 模板区. 可以自由编辑 HTML 模板内容. 在该区域还支持 zen coding 快速编写哦!'\n      },\n      {\n        element: $('.javascript .CodeMirror')[0],\n        intro: '这里是 Javascript 代码区. 编写 js 与 HTML 交互.'\n      },\n      {\n        element: $('.javascript .exe')[0],\n        intro: '点击该按钮将会执行 HTML 区及 JS 区的内容, 并将其显示到内容预览区.'\n      },\n      {\n        element: $('#reset')[0],\n        intro: '修改了代码之后. 点击该按钮将会恢复教程原来的代码.'\n      },\n      {\n        element: $('.output')[0],\n        intro: '代码的运行后, HTML 内容将展现在这里.'\n      }\n    ]\n  });\n  intro.start();\n})",
           "html": "<p>\n  在这里编写 HTML 代码\n</p>",
           "javascript": "console.log('Hello Beejs!')",
