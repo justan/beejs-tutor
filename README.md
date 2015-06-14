@@ -1,15 +1,20 @@
-tutorials.js
-============
-
-使用 `tutorials.js` 你可以快速的制作编写类似 http://learn.ractivejs.org/, http://justan.github.io/tutorials.js, http://learn.knockoutjs.com 的一个在线互动教程.
-
-使用
+Beejs 使用向导
 ---
 
-1. `git clone https://github.com/justan/tutorials.js.git`
-2. 使用 `tutorials.js` 的编辑模式编写教程
-3. 将编写好的教程内容保存进 `data.json` 中
-4. 完成
+[Beejs] 的互动使用教程
+
+
+制作自己的的教程
+----
+
+1. 下载本仓库 `git clone https://github.com/justan/beejs-tutor.git`.
+2. 用 HTTP 协议访问主页 `index.html`. 或者直接忽略第一步直接访问 `http://justan.github.io/beejs-tutor
+`
+3. 编辑教程: 在 URL hash 部分加入 `?write=true` 参数进入编辑模式.
+4. 保存教程 `data.json` 文件
+5. Done.
+
+[Beejs]: https://github.com/CFETeam/bee.js
 
 License
 ---

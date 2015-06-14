@@ -100,7 +100,7 @@
         },
         {
           "note": "### b-style\n\n样式指令 `b-sytle` 接受字符串或对象类型的值.  如: `b-style=\"{color: 'green'}\"`, `b-style=\"'color: green'\"` 都是合法的 `b-style` 指令.\n\n当 `b-style` 指令值为对象时, 驼峰式的 `javascript` 属性将转换成 `-` 连接符的 `css` 属性. \n\n需要注意的一点是 `style=\"{{expression}}\"` 这种写法在 IE 浏览器中无效, 因为 IE 浏览器在解析 `style` 属性时会将它认为不合法的属性值移除掉, 造成 `beejs` 没有机会读取表达式的内容.\n\n### b-src\n\n普通的 `src` 属性表达式写法 `src=\"{{src}}\"` 可能会想服务器发送一条 url 为 `{{src}}` 的无效请求. 所以应该使用 `b-src` 指令替代.\n",
-          "html": "<div id=\"template\">\n\t<p b-style=\"style\">晚上要不要看球?</p>\n\t<p b-style=\"'color: ' + style.color\">困=_=. 明天看录播吧</p>\n</div>",
+          "html": "<div id=\"template\">\n\t<p b-style=\"style\">晚上要不要看球?</p>\n\t<p b-style=\"'color: ' + style.color\">=_=. 明天看录播吧</p>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n   \t\tstyle: {\n        color: 'red',\n        fontSize: '2em'\n   \t\t}\n   }\n})",
           "fixCode": {}
         },
@@ -113,7 +113,7 @@
           }
         },
         {
-          "note": "### b-component 组件\n\n使用一个组件之前, 需要先定义它.  在 `beejs` 中, 组件就是继承 `Bee` 构造函数的一个子构造函数. \n\n使用 `Bee.extend` 方法创建一个子构造函数: \n```js\nvar MyAwesomeComponent = Bee.extend({\n  //原型属性\n})\n```\n\n然后通过 `Bee.component` 注册这个组件: \n\n```js\nBee.component('my-awesome', MyAwesomeComponent)\n```\n\n自定义标签就是基于组件指令, 比如 `<my-awesome></my-awesome>` 等同于 `<span b-component=\"my-awesome\"></span>`\n\n关于组件的内容, 我们会有专门内容进行叙述.",
+          "note": "### b-component 组件\n\n使用一个组件之前, 需要先定义它.  在 `beejs` 中, 组件就是继承 `Bee` 构造函数的一个子构造函数. \n\n使用 `Bee.extend` 方法创建一个子构造函数: \n```js\nvar MyAwesomeComponent = Bee.extend({\n  //原型属性\n})\n```\n\n然后通过 `Bee.component` 注册这个组件: \n\n```js\nBee.component('my-awesome', MyAwesomeComponent)\n```\n\n自定义标签就是基于组件指令, 比如 `<my-awesome></my-awesome>` 等同于 `<span b-component=\"my-awesome\"></span>`\n\n关于组件的内容, 我们会有专门章节进行叙述.",
           "html": "<div id=\"template\">\n\t<span b-component=\"my-awesome\"></span>\n</div>",
           "javascript": "var MyAwesomeComponent = Bee.extend({\n  $tpl: '<div>啥? 这就是一个组件!</div>'\n})\n\nBee.component('my-awesome', MyAwesomeComponent)\n\nnew Bee(document.getElementById('template'))",
           "fixCode": {
@@ -141,16 +141,30 @@
           "fixCode": {}
         },
         {
-          "note": "### promise\n\n**这节的内容目前是实验性支持. 请谨慎使用**\n\n在 `beejs` 的模板中支持 `promise` 对象的展示. 模板中返回的 `promise` 或者类 `promise` 对象(如: jQeury 中的 promise)都在其成功之后更新界面. \n\n如果将一个 `promise` 对象通过 `|` 操作符传递给一个 `filter`, 该 `filter` 函数并不会直接接收到该 `promise` 对象, 而是在这个 `promise` 对象成功回调之后 `filter` 函数会收到 `promise` 的成功返回值\n\n",
+          "note": "### promise\n\n**这节的内容目前是实验性支持. 请谨慎使用**\n\n如果模板中表达式的返回值是 `promise` 对象或者类 `promise` 对象(如: jQeury 中的 promise), `beejs` 会在其接到其成功回调后更新界面. \n\n如果将一个 `promise` 对象通过 `|` 操作符传递给一个 `filter`, 该 `filter` 不会立即调用, 而是在这个 `promise` 对象成功之后, 这时 `filter` 函数会收到 `promise` 的成功返回值作为参数.\n\n#### catchby\n\n`Promise` 的失败回调通过 `catchby` 关键字后的方法捕获.  试着随意更改示例中请求地址 `data.json` 看着失败回调时的效果.\n\n`catchby` 需要标准的 `promise` 对象(具有 `catch` 方法).",
           "html": "<div id=\"template\">\n  <pre>\n{{getTutor()}}\n  </pre>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n    \t\n    },\n  \tgetTutor: function() {\n      return  $.ajax('data.json', {dataType: 'text'})\n    }\n})",
           "fixCode": {
-            "html": "<div id=\"template\">\n第 {{chapterIndex + 1}} 章 第 {{stepIndex + 1}} 节的 JSON 数据: \n  <pre>\n{{getTutor() | getSteps : chapterIndex : stepIndex}}\n  </pre>\n</div>",
-            "javascript": "Bee.filter('getSteps', function(tutor, chapter, step) {\n\tvar data = tutor.list[chapter] && tutor.list[chapter].steps[step] || {};\n\treturn JSON.stringify(data, null, 2)\n})\nnew Bee(document.getElementById('template'), {\n\t$data: {\n   \t\tchapterIndex: 3,\n\t\t stepIndex: 2\n   },\n  \tgetTutor: function() {\n      return  $.ajax('data.json')\n    }\n})"
+            "html": "<div id=\"template\">\n第 {{chapterIndex + 1}} 章 第 {{stepIndex + 1}} 节的 JSON 数据: \n  <pre>\n{{getTutor() | getSteps : chapterIndex : stepIndex catchby showError}}\n  </pre>\n</div>",
+            "javascript": "Bee.filter('getSteps', function(tutor, chapter, step) {\n\tvar data = tutor.list[chapter] && tutor.list[chapter].steps[step] || {};\n\treturn JSON.stringify(data, null, 2)\n})\nnew Bee(document.getElementById('template'), {\n\t$data: {\n   \t\tchapterIndex: 3,\n\t\t stepIndex: 2\n   },\n  \tgetTutor: function() {\n      return  Promise.resolve($.ajax('data.json'))\n    },\n  \tshowError: function(err) {\n    \treturn '加载失败'\n    }\n})"
           }
         }
       ],
       "title": "过滤器(filter)"
+    },
+    {
+      "steps": [
+        {
+          "note": "`Beejs` 中通过 `Component.extend` 方法组件定义一个组件构造函数. 其中 `Component` 可以是 `Bee` 构造函数本身或者其他任何一个继承自 `Bee` 的组件构造函数.\n\n```js\nvar Time = Bee.extend({\n  $tpl: '<span>{{time}}</span>',\n  $afterInit: function() {\n    setInterval(function() {\n      this.$set('time', new Date().getLocaleTime());\n    }.bind(this), 1000)\n  }\n})\n```\n\n构造函数也可以通过 `Component.tag` 方法注册为自定义标签. 如: `Bee.tag('time', Time)`. \n这样就可以在模板中直接使用这个自定义标签了!\n",
+          "html": "<div id=\"output\">\n\t\n</div>",
+          "javascript": " var Time = Bee.extend({\n  $tpl: '<span>{{time}}</span>',\n  $afterInit: function () {\n    setInterval(function() {\n    \tthis.$set('time', new Date().toLocaleString());\n    }.bind(this), 1000)\n  }\n})\n \ndocument.getElementById('output').appendChild(new Time().$el)",
+          "fixCode": {
+            "html": "<div id=\"output\">\n\t<time></time>\n</div>",
+            "javascript": " var Time = Bee.extend({\n  $tpl: '<span>{{time}}</span>',\n  $afterInit: function () {\n    setInterval(function() {\n    \tthis.$set('time', new Date().toLocaleString());\n    }.bind(this), 1000)\n  }\n})\n \n //Bee.tag 是 Bee.component 的别名\n Bee.tag('time', Time);\n\n new Bee(document.getElementById('output'))"
+          }
+        }
+      ],
+      "title": "组件系统"
     }
   ],
   "title": "Beejs 入门向导"

@@ -26,7 +26,7 @@ $(function() {
         var html = htmlCm.getValue();
         output.open();
         output.write(html)
-        output.write('<script> Bee = top.Bee; $ = top.$ </script>')
+        output.write('<script> Bee = top.Bee; $ = top.$; Promise = top.Promise </script>')
         output.write('<script>' + jsCm.getValue() + '</script>');
         output.close()
       }
