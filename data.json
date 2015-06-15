@@ -10,10 +10,10 @@
           "fixCode": {}
         },
         {
-          "note": "### 模板与 Javascript\n\n完整的 `Beejs` 程序包括模板和 Js 两部分.  \n\n`Beejs` 模板应该是标准的 `HTML` 片段. 可以为字符串或 DOM 元素. \n\n模板需要通过 `Bee` 构造函数进行解析生成一个 `bee` 实例 (**ViewModel 实例**) 才能发挥功能. ",
+          "note": "### 模板与 Javascript\n\n完整的 `Beejs` 程序包括模板和 Js 两部分.  \n\n`Beejs` 模板应该是标准的 `HTML` 片段. 可以为字符串或 DOM 元素. \n\n模板需要通过 `Bee` 构造函数进行启动并解析生成一个 `bee` 实例 (**ViewModel 实例**) 才能发挥功能. ",
           "init": "",
           "html": "<div id=\"template\">\n  {{name}}\n</div>",
-          "javascript": "var bee = new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
+          "javascript": "//new Bee 一下, 就开始解析一个元素或模板下的内容\nvar bee = new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
           "fixCode": {}
         }
       ],
@@ -58,12 +58,13 @@
           "fixCode": {}
         },
         {
-          "note": "### b-if\n\n模板中的条件判断使用 `b-if` . 当 `b-if` 对应表达式中表达式值为假时, `b-if` 指令所在的节点将不会出现在 `DOM` 树中, 为真时则正常显示.\n\n修改 `isShow` 值为 `false` 查看效果.",
+          "note": "### b-if\n\n模板中的条件判断使用 `b-if` . 当 `b-if` 对应表达式中表达式值为假时, `b-if` 指令所在的节点将不会出现在 `DOM` 树中, 为真时则正常显示.\n\n修改 `isShow` 值为 `false` 或者点击补全代码按钮以查看效果.",
           "init": "",
           "html": "<div id=\"template\">\n  {{isShow}}\n  <p b-if=\"isShow\">当 isShow 为假时, 这段文字将从 DOM 树种移除</p>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    isShow: true\n  }\n})",
           "fixCode": {
-            "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    isShow: false\n  }\n})"
+            "javascript": "var bee = new Bee(document.getElementById('template'), {\n  $data: {\n    isShow: true\n  }\n})\n\nbee.$set('isShow', false);",
+            "html": "<div id=\"template\">\n  {{isShow}}\n  <p b-if=\"isShow\">当 isShow 为假时, 这段文字将从 DOM 树种移除</p>\n</div>"
           }
         },
         {
@@ -155,13 +156,25 @@
     {
       "steps": [
         {
-          "note": "`Beejs` 中通过 `Component.extend` 方法组件定义一个组件构造函数. 其中 `Component` 可以是 `Bee` 构造函数本身或者其他任何一个继承自 `Bee` 的组件构造函数.\n\n```js\nvar Time = Bee.extend({\n  $tpl: '<span>{{time}}</span>',\n  $afterInit: function() {\n    setInterval(function() {\n      this.$set('time', new Date().getLocaleTime());\n    }.bind(this), 1000)\n  }\n})\n```\n\n构造函数也可以通过 `Component.tag` 方法注册为自定义标签. 如: `Bee.tag('time', Time)`. \n这样就可以在模板中直接使用这个自定义标签了!\n",
+          "note": "`Beejs` 中通过 `Component.extend` 方法组件定义一个组件构造函数. 其中 `Component` 可以是 `Bee` 构造函数本身或者其他任何一个继承自 `Bee` 的组件构造函数.\n\n构造函数也可以通过 `Component.tag` 方法注册为自定义标签. 如: `Bee.tag('time', Time)`. \n这样就可以在模板中直接使用这个自定义标签了!\n\n根据组件定义方式的不同, 其在使用时也有所不同. \n\n1. 所有组件可以用 `new Component` 这种方式来实例化, 并且一般情况下都需要手动将组件元素插入 `DOM` 中.\n2. 通过 `Component.tag` 注册过自定义标签的组件可以使用自定义标签来实例化. 唯一的要求是该自定义标签或它的容器必须经过解析(经过 `Bee` 构造函数处理 )\n\n上面组件实例化的两种方式类似图片的两种实例方式:  `new Image` 和 `<img src=\"\" />`\n\n\n运用组件自定义标签的方式我们可以陈述式 (declarative) 的描述一个更为复杂的应用.",
           "html": "<div id=\"output\">\n\t\n</div>",
           "javascript": " var Time = Bee.extend({\n  $tpl: '<span>{{time}}</span>',\n  $afterInit: function () {\n    setInterval(function() {\n    \tthis.$set('time', new Date().toLocaleString());\n    }.bind(this), 1000)\n  }\n})\n \ndocument.getElementById('output').appendChild(new Time().$el)",
           "fixCode": {
             "html": "<div id=\"output\">\n\t<time></time>\n</div>",
             "javascript": " var Time = Bee.extend({\n  $tpl: '<span>{{time}}</span>',\n  $afterInit: function () {\n    setInterval(function() {\n    \tthis.$set('time', new Date().toLocaleString());\n    }.bind(this), 1000)\n  }\n})\n \n //Bee.tag 是 Bee.component 的别名\n Bee.tag('time', Time);\n\n new Bee(document.getElementById('output'))"
           }
+        },
+        {
+          "note": "同样的, 根据组件实例化方式的不同, 组件的初始数据同样有两种方式传入.\n\n1. 一种是普通的构造函数传入.\n\n  ```js\n  new MyAwesomeComponent({\n    $data: {  property:\"abc\"  }\n  })\n  ```\n2.  对于使用自定义标签的组件则可以通过 `HTML` 属性传入.\n\n  ```html\n  <my-awesome-component property=\"abc\"></my-awesome-component>\n  ```\n\n写在自定义标签属性上的属性指令 `property=\"{{parentData}}\"` 将建立父组件与子组件的**单向**绑定. 即: 父组件相应值得变化将会同步到子组件上去, 而子组件的变化则不会同步到父组件. \n",
+          "html": "<div id=\"output\">\n  \t<label>宽: <input type=\"text\" value=\"300\" b-model=\"width\" /></label>\n  \t<label>高: <input type=\"text\" b-model=\"height\" /></label>\n\t<my-image src='assets/iceland.gif' height=\"{{height}}\" width=\"{{width}}\"></my-image>\n</div>",
+          "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-src=\"src\" b-style=\"{width: width, height: height}\" />'\n})\n\nBee.tag('my-image', MyImage)\n\nnew Bee(document.getElementById('output'));",
+          "fixCode": {}
+        },
+        {
+          "note": "由于 `HTML` 属性不分大小写, 所以对于驼峰式的属性需要将其转换成连接符式的属性名传入. `my-property=\"bee\"` ==> `{myProperty: 'bee'}`\n\n### 传递更复杂的数据?\n\n目前为止通过自定义标签属性传递给组件的内容仅限于字符串. 这也是 `HTML` 属性的工作方式. 但实际上我们有事会需要传递更复杂的数据给自定义标签, 这时需要用到 `b-with` 指令. \n\n`b-with` 指令的值是一个对象, 对象内容可以包含任意数据类型. 该对象会并入组件的 `$data` 中. \n\n需要注意的是, 我们不推荐将父组件的方法通过 `b-with` 传递给子组件使用(虽然你可以). 这是一种反模式的做法. 如果一个组件需要需要某个方法, 最好的做法是在组件内部实现它. ",
+          "html": "<div id=\"output\">\n\t<my-image src='assets/iceland.gif' b-with=\"{childrenEvent: parentEvent}\"></my-image>\n</div>",
+          "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-on=\"childrenEvent\" b-src=\"src\" />'\n})\n\nBee.tag('my-image', MyImage)\n\nnew Bee(document.getElementById('output'), {\n\tparentEvent: {\n    \tclick: function() {\n        \talert(this.src)\n     \t}\n    }\n});",
+          "fixCode": {}
         }
       ],
       "title": "组件系统"
