@@ -171,10 +171,13 @@
           "fixCode": {}
         },
         {
-          "note": "由于 `HTML` 属性不分大小写, 所以对于驼峰式的属性需要将其转换成连接符式的属性名传入. `my-property=\"bee\"` ==> `{myProperty: 'bee'}`\n\n### 传递更复杂的数据?\n\n目前为止通过自定义标签属性传递给组件的内容仅限于字符串. 这也是 `HTML` 属性的工作方式. 但实际上我们有事会需要传递更复杂的数据给自定义标签, 这时需要用到 `b-with` 指令. \n\n`b-with` 指令的值是一个对象, 对象内容可以包含任意数据类型. 该对象会并入组件的 `$data` 中. \n\n需要注意的是, 我们不推荐将父组件的方法通过 `b-with` 传递给子组件使用(虽然你可以). 这是一种反模式的做法. 如果一个组件需要需要某个方法, 最好的做法是在组件内部实现它. ",
+          "note": "由于 `HTML` 属性不分大小写, 所以对于驼峰式的属性需要将其转换成连接符式的属性名传入. `my-property=\"bee\"` ==> `{myProperty: 'bee'}`\n\n### 传递更复杂的数据?\n\n目前为止通过自定义标签属性传递给组件的内容仅限于字符串. 这也是 `HTML` 属性的工作方式. 但实际上我们有事会需要传递更复杂的数据给自定义标签, 这时需要用到 `b-with` 指令. \n\n`b-with` 指令的值是一个对象, 对象内容可以包含任意数据类型. 该对象会并入组件的 `$data` 中. \n\n需要注意的是, 我们不推荐将父组件的方法通过 `b-with` 传递给子组件使用(虽然你可以). 这是一种反模式的做法. 如果一个组件需要需要某个方法, 最好的做法是继承该组件, 并在新组件中实现这些较为复杂的逻辑!",
           "html": "<div id=\"output\">\n\t<my-image src='assets/iceland.gif' b-with=\"{childrenEvent: parentEvent}\"></my-image>\n</div>",
           "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-on=\"childrenEvent\" b-src=\"src\" />'\n})\n\nBee.tag('my-image', MyImage)\n\nnew Bee(document.getElementById('output'), {\n\tparentEvent: {\n    \tclick: function() {\n        \talert(this.src)\n     \t}\n    }\n});",
-          "fixCode": {}
+          "fixCode": {
+            "html": "<div id=\"output\">\n\t<my-awesome-image src='assets/iceland.gif'></my-awesome-image>\n</div>",
+            "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-on=\"events\" b-src=\"src\" />'\n})\n\n//更好的方式是继承基础组件创建一个新的组件\nvar MyAwesomeImage = MyImage.extend({\n\tevents: {\n\t\tclick: function() {\n          alert(this.src)\n      }   \n   }\n})\n\nBee.tag('my-awesome-image', MyAwesomeImage)\n\nnew Bee(document.getElementById('output'));"
+          }
         }
       ],
       "title": "组件系统"
