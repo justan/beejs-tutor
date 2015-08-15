@@ -10,7 +10,7 @@
           "fixCode": {}
         },
         {
-          "note": "### 模板与 Javascript\n\n完整的 `Beejs` 程序包括模板和 Js 两部分.  \n\n`Beejs` 模板应该是标准的 `HTML` 片段. 可以为字符串或 DOM 元素. \n\n模板需要通过 `Bee` 构造函数进行启动并解析生成一个 `bee` 实例 (**ViewModel 实例**) 才能发挥功能. ",
+          "note": "### 模板与 Javascript\n\n完整的 `Beejs` 程序包括模板和 Js 两部分.  \n\n`Beejs` 模板应该是普通的 `HTML` 片段. \n\n模板需要通过 `Bee` 构造函数解析生成一个 `bee` 实例 (**ViewModel 实例**) 才能发挥功能. ",
           "init": "",
           "html": "<div id=\"template\">\n  {{name}}\n</div>",
           "javascript": "//new Bee 一下, 就开始解析一个元素或模板下的内容\nvar bee = new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
@@ -22,14 +22,14 @@
     {
       "steps": [
         {
-          "note": "除了普通的 `HTML` 标签外,  在模板中 `beejs` 还具有两种特有标记: **指令(Directive)** 和 **表达式**.\n\n- 指令是来自 [angularJs] 中的概念. 在 `beejs` 中的指令都是带有 `b-` 前缀的 `HTML` 元素属性.\n- `Beejs` 中的表达式是 `javascript` 表达式的不严格子集. \n\n比如右侧示例模板中 `b-model=\"name\"` 就是一个指令. \n\n`{{name.split('').reverse().join('')}}` 则是一个使用在文本中的表达式. 表达式可以使用在普通文本位置及元素属性值上 (包括普通属性和指令).\n\n[angularJs]: https://angularjs.org",
+          "note": "`Beejs` 模板中有两种特殊标记: **指令(Directive)** 和 **表达式**.\n\n- 指令是来自 [angularJs] 中的概念. 在 `beejs` 中的指令通常是带有 `b-` 前缀的 `HTML` 元素属性.\n- `Beejs` 中的表达式是 `javascript` 表达式的不严格子集. \n\n比如右侧示例模板中 `b-model=\"name\"` 就是一个双向绑定指令. \n\n文本中双大括号包裹起来的部分 `name.split('').reverse().join('')` 则是一个表达式. 表达式可以使用在普通文本位置及元素属性值上 (包括普通属性和指令).\n\n[angularJs]: https://angularjs.org",
           "init": "",
           "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  {{name.split('').reverse().join('')}}\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
           "fixCode": {}
         },
         {
-          "note": "在模板中使用双重大括号  `{{}}` 表示表达式求值. \n\n点击 \"Run\" 按钮运行程序来查看结果.\n\n---\n\n对于内容中包括 `HTML` 标签的内容来说, 普通的双大括号输出是转义 (escape) 过后的内容. \n\n如果想输出非转义 (unescape) 的 `HTML` 内容,  可以使用三重大括号 `{{{}}}`. \n\n需要注意的一点是非转义内容在 `HTML` 属性中仍然会被转义.\n\n---\n\n试着输入框中输入 `HTML` 标签看下运行效果. 然后再点击补全代码按钮以观看非转义标签的效果.",
+          "note": "在模板中使用双重大括号  `{{}}` 表示表达式求值. \n\n---\n\n对于内容中包括 `HTML` 标签的内容来说, 普通的双大括号输出是转义 (escape) 过后的内容. \n\n如果想输出非转义 (unescape) 的 `HTML` 内容,  可以使用三重大括号 `{{{}}}`. \n\n需要注意的一点是非转义内容在 `HTML` 属性中仍然会被转义.\n\n---\n\n试着输入框中输入 `HTML` 标签看下运行效果. 然后再点击补全代码按钮以观看非转义标签的效果.",
           "init": "",
           "html": "<div id=\"template\">\n  <input type=\"text\" b-model=\"name\" />\n  <p title=\"名字: {{name}}\">{{name}}</p>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
@@ -51,7 +51,7 @@
           "fixCode": {}
         },
         {
-          "note": "### b-text, b-html\n\n在文本中这两个指令分别等效于 `{{}}` 和 `{{{}}}` 表达式.\n\n这两个个指令与花括号表达式直接量的区别在于, 双重花括号表达式可用于属性之中. 而 `b-text, b-html` 指令只能用于文本内容.\n\n",
+          "note": "### b-text, b-html\n\n在文本中这两个指令分别等效于 `{{}}` 和 `{{{}}}` 表达式.\n\n这两个个指令与花括号表达式直接量的区别在于, 双重花括号表达式可用于属性之中. 而 `b-text, b-html` 指令只能用于文本内容.\n\n\n",
           "init": "",
           "html": "<div id=\"template\">\n  <span b-text=\"name\"></span>\n  <span b-html=\"name\"></span>\n  <hr />\n  {{name}}\n  {{{name}}}\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    name: 'Bee'\n  }\n})",
@@ -68,7 +68,7 @@
           }
         },
         {
-          "note": "### b-repeat\n\n`b-repeat` 指令用于显示数组中的内容. \n\nRepeat 指令中使用 `item in list` 这种语法, `item` 表示数组内容, `list` 为数组或者结果为数组的表达式. 另外使用 `$index` 表示条目在列表中的索引.\n\n对于 `b-repeat` 指令目标数组 `list`, `beejs` 会为其添加三个操作方法: `$set, $replace, $remove`.\n\n另外 `beejs` 会监控该数组的操作方法 `splice, push, pop, shift, unshift, sort, reverse`, 并更新界面.\n\n注意: `b-repeat` 和 `b-if` 不要在同一节点上使用. 请直接对数组进行过滤.",
+          "note": "### b-repeat\n\n`b-repeat` 指令用于显示数组中的内容. \n\n条目索引使用 `$index` 表示. 嵌套数组的上级索引用 `$paraent.$index` 表示.\n\n----\n\n对于指令中的数组,  会为其添加三个操作方法: `$set, $replace, $remove`.\n\n另外 `beejs` 会监控该数组的操作方法 `splice, push, pop, shift, unshift, sort, reverse`. 当调用这些数组操作方法时, 会同时更新界面.\n\n注意: `b-repeat` 和 `b-if` 不要在同一节点上使用. ",
           "init": "",
           "html": "<div id=\"template\">\n  <ul>\n  \t<li b-repeat=\"item in list\">{{$index + 1}}. {{item.name}}</li>\n  </ul>\n  <p>共 {{list.length}} 条</p>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  $data: {\n    list: [\n      {name: 'Ant'},\n      {name: 'Bee'},\n      {name: 'Cicada'},\n      {name: 'Dragenfly'}\n    ]\n  }\n})",
@@ -86,15 +86,15 @@
           }
         },
         {
-          "note": "### 事件\n\n通过 `b-on`  指令我们可以进行事件处理.   \n\n`b-on` 指令的值是一个包含了事件名及处理函数的对象.  事件处理函数内的 `this` 指向当前 `bee` 实例.\n\n`b-on` 指令还提供了基本的事件委托功能, 在事件名后写上选择器即可:\n```\n{\n  'click li': function(e) { \n    //dosth here\n   }\n}\n```\n",
-          "html": "<div id=\"template\">\n  <button b-on=\"{click: clear}\">清空</button>\n  <div b-on=\"events\">\n      事件日志: \n      <ul>\n          <li b-repeat=\"item in actions\">{{item}}</li>\n      </ul>\n  </div>\n</div>",
+          "note": "### 事件\n\n通过 `b-on`  指令我们可以进行事件处理.   \n\n`b-on` 指令的值是一个包含了事件名及处理函数的对象.  事件处理函数内的 `this` 指向当前 `bee` 实例.\n\n同时也可以使用 `b-on-click` 这种 `b-on-EVENTNAME`  这类快捷的事件处理方式. 事件触发时将会调用指令值中表达式.\n\n----\n\n在事件名后写上选择器即可委托代理事件:\n```\n{\n  'click li': function(e) { \n    //dosth here\n   }\n}\n```\n",
+          "html": "<div id=\"template\">\n  <button b-on-click=\"clear()\">清空</button>\n  <div b-on=\"events\">\n      事件日志: \n      <ul>\n          <li b-repeat=\"item in actions\">{{item}}</li>\n      </ul>\n  </div>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n  \t$data: {\n      actions : []\n\t},\n\tevents: {\n      click: function() { this.actions.unshift('click!') },\n      mouseenter: function() { this.actions.unshift('mouseenter!') },\n      mouseleave: function() { this.actions.unshift('mouseleave!') }\n   },\n   clear: function() {\n      this.actions.splice(0, this.actions.length)\n   }\n})",
           "fixCode": {
             "javascript": "new Bee(document.getElementById('template'), {\n  \t$data: {\n      actions : []\n\t},\n\tevents: {\n      click: function() { this.actions.unshift('click!') },\n      mouseenter: function() { this.actions.unshift('mouseenter!') },\n      mouseleave: function() { this.actions.unshift('mouseleave!') },\n      'click li': function() { this.actions.unshift('click li!') }\n   },\n   clear: function() {\n      this.actions.splice(0, this.actions.length)\n   }\n})"
           }
         },
         {
-          "note": "### b-attr\n\n`HTML` 属性指令 `b-attr` 的值为一个对象, 会映射成节点的 `HTML` 属性.\n\n写法 `attribute=\"{{expression}}\"` 是 `b-attr` 指令的一个特例, 这种写法只针对单个属性.\n\n另外一种 `b-attr` 的特例是条件属性,  其语法是: `attribute?=\"expression\"`. 后面表达式为真时, 属性插入, 表达式为假时, 属性移除. 这种写法对一些 `Boolean` 属性比较有用, 比如表单元素的: `readonly, disabled` 等.",
+          "note": "### b-attr\n\n`HTML` 属性指令 `b-attr` 的值为一个对象, 会映射成节点的 `HTML` 属性.\n\n前面出现过的 `attribute=\"{{expression}}\"` 是 `b-attr` 指令的一个特例.\n\n另外一种 `b-attr` 的特例是条件属性,  其语法是: `attribute?=\"expression\"`. 后面表达式为真时, 属性插入, 表达式为假时, 属性移除. 这种写法对一些 `Boolean` 属性比较有用, 比如表单元素的: `readonly, disabled` 等.",
           "html": "<div id=\"template\">\n\t<div b-attr=\"attr\">b-attr 展示区. 可以添加任何属性了</div>\n  \t<!-- value=\"{{attr.style}}\" 不具备双向绑定功能. 想要双向绑定请使用 b-model=\"attr.style\" -->\n  \t<input b-model=\"attr.style\" disabled?=\"disabled\" type=\"text\" />\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n    \tattr: {\n \t\t\tstyle: 'color:red'\n    \t},\n    \tdisabled: false\n    }\n})",
           "fixCode": {}
@@ -106,7 +106,7 @@
           "fixCode": {}
         },
         {
-          "note": "### b-content\n\n`b-content` 是比 `b-text` 和 `b-html` 更为强大的内容输出指令.\n\n 除了支持普通的字符串, HTML片段外, `b-content` 还支持子模板的解析与输出.\n\n`b-content`   指令的值可以是普通字符串, `HTML` 标签片段, 或 `DOM` 元素.",
+          "note": "### b-content\n\n`b-content` 是比 `b-text` 和 `b-html` 更为强大的内容输出指令.\n\n 除了支持普通的字符串, HTML片段外, `b-content` 还支持子模板的解析与输出.\n\n`b-content`   指令的值可以是普通字符串, `HTML` 标签片段, 或 `DOM` 元素.\n\n---\n\n`{{> content }}` 是 `b-content` 直接量写法.",
           "html": "<div id=\"template\">\n\t<span b-content=\"content1\"></span>\n</div>",
           "javascript": "new Bee(document.getElementById('template'), {\n\t$data: {\n      name: 'Bee'\n   },\n  \tcontent1: '{{name}}'\n})",
           "fixCode": {
@@ -171,13 +171,10 @@
           "fixCode": {}
         },
         {
-          "note": "由于 `HTML` 属性不分大小写, 所以对于驼峰式的属性需要将其转换成连接符式的属性名传入. `my-property=\"bee\"` ==> `{myProperty: 'bee'}`\n\n### 传递更复杂的数据?\n\n目前为止通过自定义标签属性传递给组件的内容仅限于字符串. 这也是 `HTML` 属性的工作方式. 但实际上我们有事会需要传递更复杂的数据给自定义标签, 这时需要用到 `b-with` 指令. \n\n`b-with` 指令的值是一个对象, 对象内容可以包含任意数据类型. 该对象会并入组件的 `$data` 中. \n\n需要注意的是, 我们不推荐将父组件的方法通过 `b-with` 传递给子组件使用(虽然你可以). 这是一种反模式的做法. 如果一个组件需要需要某个方法, 最好的做法是继承该组件, 并在新组件中实现这些较为复杂的逻辑!",
-          "html": "<div id=\"output\">\n\t<my-image src='assets/iceland.gif' b-with=\"{childrenEvent: parentEvent}\"></my-image>\n</div>",
-          "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-on=\"childrenEvent\" b-src=\"src\" />'\n})\n\nBee.tag('my-image', MyImage)\n\nnew Bee(document.getElementById('output'), {\n\tparentEvent: {\n    \tclick: function() {\n        \talert(this.src)\n     \t}\n    }\n});",
-          "fixCode": {
-            "html": "<div id=\"output\">\n\t<my-awesome-image src='assets/iceland.gif'></my-awesome-image>\n</div>",
-            "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-on=\"events\" b-src=\"src\" />'\n})\n\n//更好的方式是继承基础组件创建一个新的组件\nvar MyAwesomeImage = MyImage.extend({\n\tevents: {\n\t\tclick: function() {\n          alert(this.src)\n      }   \n   }\n})\n\nBee.tag('my-awesome-image', MyAwesomeImage)\n\nnew Bee(document.getElementById('output'));"
-          }
+          "note": "由于 `HTML` 属性不分大小写, 所以对于驼峰式的属性需要将其转换成连接符式传入:\n- `my-property=\"bee\"` ==> `{myProperty: 'bee'}`\n- `my--property=\"bee\"` ==> `{my-property: 'bee'}`\n\n---\n\n组件中的属性表达式支持传递复杂类型的数据. 需要注意的是, 传递复杂数据时属性表达式中只能有一个表达式, 不能有其他多余字符或表达式, 否则会被转为字符串传入.\n",
+          "html": "<div id=\"output\">\n\t<my-image src='assets/iceland.gif' events=\"{{events}}\"></my-image>\n</div>",
+          "javascript": "var MyImage = Bee.extend({\n  $tpl: '<img b-on=\"events\" b-src=\"src\" />'\n})\n\nBee.tag('my-image', MyImage)\n\nnew Bee(document.getElementById('output'), {\n\tevents: {\n    \tclick: function() {\n        \talert(this.src)\n     \t}\n    }\n});",
+          "fixCode": {}
         }
       ],
       "title": "组件系统"

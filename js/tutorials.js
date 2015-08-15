@@ -230,10 +230,7 @@ $(function() {
       }
     });
 
-    TuTor.directive('on', {
-      link: function link(vm) {
-        this.vm = vm;
-      },
+    TuTor.directive('on', $.extend({}, Bee.directives.on, {
       update: function update(events) {
         var selector, eventType;
         for (var name in events) {
@@ -243,7 +240,7 @@ $(function() {
           $(this.el).on(eventType, selector, events[name].bind(this.vm));
         }
       }
-    });
+    }));
 
     var query = queryParse(location.search.slice(1))
       , filePath = query.data || 'data.json'

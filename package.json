@@ -2,7 +2,7 @@
   "name": "tutorials-js",
   "version": "0.2.0",
   "dependencies": {
-    "beejs": "^0.3.0",
+    "beejs": "^0.5.2",
     "es6-promise": "^2.3.0"
   },
   "devDependencies": {

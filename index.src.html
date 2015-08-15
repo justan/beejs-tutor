@@ -82,7 +82,8 @@
           </div>
           <div class='panel-body' id="notes">{{{marked(step.note)}}}</div>
           <div class="btn-group btn-group-justified">
-            <a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}" title="懒人专用">补全本节代码</a>
+            <a href="javascript:;" class="btn btn-success fixcode {{step.fixCode.html || step.fixCode.javascript ? '' : 'disabled'}}"
+              title="懒人专用">补全本节代码</a>
             <a href="javascript:;" class="btn btn-primary next-step {{hasNextStep?'':'disabled'}}">下一节</a></div>
         </div>
         <div class='panel panel-default output'>
